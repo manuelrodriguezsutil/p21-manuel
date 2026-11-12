@@ -1,0 +1,18 @@
+services:
+  web:
+    image: nginx:1.30-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./sites:/var/www:ro
+      - ./logs:/var/log/nginx
+    depends_on:
+      - php
+    restart: unless-stopped
+  php:
+    image: php:8.4-fpm-alpine
+    volumes:
+      - ./sites/php:/var/www/php:ro
+      - ./php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
+    restart: unless-stopped
